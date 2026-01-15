@@ -194,23 +194,16 @@ eksctl create cluster -f cluster.yaml
 
 [결과]
 ```
-2025-12-15 04:51:25 [ℹ]  eksctl version 0.220.0
-2025-12-15 04:51:25 [ℹ]  using region ap-northeast-2
-2025-12-15 04:51:25 [✔]  using existing VPC (vpc-0c1d7c478d72dc9df) and subnets (private:map[ap-northeast-2a:{subnet-015e95a219d74be01 ap-northeast-2a 10.0.4.0/24 0 } ap-northeast-2b:{subnet-02ec412eb8eea970b ap-northeast-2b 10.0.1.0/24 0 } ap-northeast-2c:{subnet-0c3ccee255056c5b7 ap-northeast-2c 10.0.6.0/24 0 } ap-northeast-2d:{subnet-0c57f89f419008c4f ap-northeast-2d 10.0.3.0/24 0 }] public:map[])
-2025-12-15 04:51:25 [!]  custom VPC/subnets will be used; if resulting cluster doesn't function as expected, make sure to review the configuration of VPC/subnets
-2025-12-15 04:51:25 [ℹ]  nodegroup "ng-arm" will use "" [AmazonLinux2023/1.33]
-2025-12-15 04:51:25 [ℹ]  nodegroup "ng-x86" will use "" [AmazonLinux2023/1.33]
-2025-12-15 04:51:25 [!]  Auto Mode will be enabled by default in an upcoming release of eksctl. This means managed node groups and managed networking add-ons will no longer be created by default. To maintain current behavior, explicitly set 'autoModeConfig.enabled: false' in your cluster configuration. Learn more: https://eksctl.io/usage/auto-mode/
-2025-12-15 04:51:25 [ℹ]  using Kubernetes version 1.33
+2026-01-15 16:25:06 [ℹ]  eksctl version 0.221.0
+2026-01-15 16:25:06 [ℹ]  using region ap-northeast-2
+2026-01-15 16:25:06 [✔]  using existing VPC (vpc-0c0cba9615d22b3e8) and subnets (private:map[ap-northeast-2a:{subnet-000c6c98079fd1f4a ap-northeast-2a 10.0.10.0/24 0 } ap-northeast-2b:{subnet-016c28f36b52c1290 ap-northeast-2b 10.0.11.0/24 0 } ap-northeast-2c:{subnet-084967ccbf3f04381 ap-northeast-2c 10.0.12.0/24 0 } ap-northeast-2d:{subnet-0fe5bcf56f245575b ap-northeast-2d 10.0.13.0/24 0 }] public:map[])
+2026-01-15 16:25:06 [!]  custom VPC/subnets will be used; if resulting cluster doesn't function as expected, make sure to review the configuration of VPC/subnets
+2026-01-15 16:25:06 [ℹ]  nodegroup "ng-arm" will use "" [AmazonLinux2023/1.34]
+2026-01-15 16:25:06 [!]  Auto Mode will be enabled by default in an upcoming release of eksctl. This means managed node groups and managed networking add-ons will no longer be created by default. To maintain current behavior, explicitly set 'autoModeConfig.enabled: false' in your cluster configuration. Learn more: https://eksctl.io/usage/auto-mode/
+2026-01-15 16:25:06 [ℹ]  using Kubernetes version 1.34
+2026-01-15 16:25:06 [ℹ]  creating EKS cluster "slinky-on-k8s" in "ap-northeast-2" region with managed nodes
+2026-01-15 16:25:06 [ℹ]  1 nodegroup (ng-arm) was included (based on the include/exclude rules)
 ...
-...
-2025-12-15 05:09:32 [ℹ]  waiting for CloudFormation stack "eksctl-training-on-eks-addon-iamserviceaccount-karpenter-karpenter"
-2025-12-15 05:09:32 [ℹ]  created namespace "karpenter"
-2025-12-15 05:09:32 [ℹ]  created serviceaccount "karpenter/karpenter"
-2025-12-15 05:09:32 [ℹ]  adding identity "arn:aws:iam::499514681453:role/eksctl-KarpenterNodeRole-training-on-eks" to auth ConfigMap
-2025-12-15 05:09:32 [ℹ]  adding Karpenter to cluster training-on-eks
-2025-12-15 05:09:52 [ℹ]  kubectl command should work with "/home/ec2-user/.kube/config", try 'kubectl get nodes'
-2025-12-15 05:09:52 [✔]  EKS cluster "training-on-eks" in "ap-northeast-2" region is ready
 ```
 
 EKS 에서 클러스터 시큐리티 그룹은 컨트롤 플레인과 워커노드 사이의 통신을 가능하게 한다. 컨트롤 플레인은 10250 포트를 통해 노드의 큐블렛과 통신하고 워커노드는 443 포트를 이용하여 컨트롤 플레인의 API 서버에 접근을 시도한다. 아래 명령어는 클러스터 시큐리티 그룹에 "karpenter.sh/discovery=${CLUSTER_NAME}" 태크가 존재하는지 확인하는 스크립트이다. 카펜터가 노드를 생성할때, 이와 동일한 태크를 가진 시큐리티 그룹을 찾아 신규 노드에 할당하게 된다. 시큐리티 그룹 검색에 실패하게 되는 경우, EC2 인스턴스는 생성되지만 EKS 클러스터에 조인하지 못한다.  
