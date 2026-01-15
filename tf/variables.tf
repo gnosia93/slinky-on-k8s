@@ -13,7 +13,7 @@ variable "key_name" {
 
 variable "cluster_name" {
   type        = string
-  default     = "aerial-on-eks"
+  default     = "slinky-on-k8s"
 }
 
 variable "vpc_cidr_block" {
