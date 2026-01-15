@@ -1,4 +1,4 @@
-# slurm-on-k8s
+# slinky-on-k8s
 
 
 ### _Topics_ ###
