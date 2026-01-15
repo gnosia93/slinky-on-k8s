@@ -265,6 +265,6 @@ sudo systemctl restart code-server@ec2-user
 _DATA
 
   tags = {
-    Name = "aoe-code-server-x86"
+    Name = "slinky-code-server-x86"
   }
 }
