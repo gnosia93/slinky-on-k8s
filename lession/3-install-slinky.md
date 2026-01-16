@@ -95,13 +95,30 @@ Learn more about Slinky:
 export AWS_REGION=$(aws ec2 describe-availability-zones --query 'AvailabilityZones[0].RegionName' --output text)
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
 export CLUSTER_NAME="slinky-on-k8s"
-
+```
+OIDC 가 설치되어 있는지 확인한다. 
+```
 aws eks describe-cluster --name $CLUSTER_NAME --query "cluster.identity.oidc.issuer" --output text
 ```
 [결과]
 ```
 https://oidc.eks.ap-northeast-2.amazonaws.com/id/FD17E419F758EAAE2455EEEF9F2D40B5
 ```
+aws-ebs-csi-driver 애드온이 설치되어 있는지 확인한다. 
+```
+aws eks list-addons --cluster-name ${CLUSTER_NAME} --output=text
+```
+[결과]
+```
+ADDONS  aws-ebs-csi-driver
+ADDONS  coredns
+ADDONS  eks-pod-identity-agent
+ADDONS  kube-proxy
+ADDONS  metrics-server
+ADDONS  vpc-cni
+```
+
+
 
 ## 레퍼런스 ##
 * https://github.com/SlinkyProject/slurm-operator
