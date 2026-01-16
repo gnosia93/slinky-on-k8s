@@ -1,4 +1,4 @@
-# slurm-on-k8s
+# slurm-on-eks
 
 
 본 워크샵은 EKS 클러스터에서 Slurm(Simple Linux Utility for Resource Management) 클러스터를 활용한 분산 트레이닝에 대해서 다룬다. Llama 3와 같은 대규모 모델을 AWS 인프라에서 가장 비용 효율적이고 안정적으로 학습시키는 법을 마스터하실 수 있습니다. 
