@@ -1,3 +1,5 @@
+모델이 커질수록 쓰기 속도가 병목이 됩니다. 여기서 **PyTorch FSDP의 분산 체크포인트(Distributed Checkpoint)**와 **FSx 스트라이핑(lfs setstripe)**의 시너지를 확인하는 내용을 추천합니다.
+
 ### 1. FSx for Lustre 생성 및 S3 데이터 연결 ###
 FSx for Lustre를 생성할 때 학습 데이터가 담긴 S3 버킷을 데이터 리포지토리(Data Repository)로 연결합니다. 
 * Lazy Loading: 모든 데이터를 미리 다운로드할 필요 없이, 학습 스크립트가 파일에 접근하는 순간 S3에서 Lustre 캐시로 데이터를 즉시 가져옵니다.
