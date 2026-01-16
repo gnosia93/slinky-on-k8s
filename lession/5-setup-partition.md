@@ -58,6 +58,62 @@ Time-to-Live (TTL): 작업이 끝나고 노드가 즉시 삭제되길 원한다�
 현재 노드풀 YAML을 직접 작성 중이신가요? 아니면 기존에 설치된 카펜터에 p4dn만 추가하려 하시나요? Spot 인스턴스 사용 여부를 알려주시면 비용 최적화 옵션도 덧붙여 드릴 수 있습니다.
 
 
+* Slinky 환경에서 Slurm 파티션과 Karpenter 노드풀을 연결하는 핵심은 "이 파티션에 제출된 작업은 반드시 이 노드(Karpenter가 띄운 노드) 위에서만 실행되어야 한다"는 제약 조건을 거는 것입니다.
+* Slinky Helm Chart 가이드와 일반적인 Slurm-on-K8s 구조에 따르면, values.yaml에 아래와 같이 nodeSelector와 tolerations를 명시해야 합니다.
+
+[values.yaml]
+```
+clusters:
+  - name: "slinky-cluster"
+    partitions:
+      - name: "gpu-partition"
+        instance_types: ["p4dn.24xlarge"]
+        # 1. 노드 선택 (NodePool의 labels와 일치해야 함)
+        nodeSelector:
+          karpenter.sh/nodepool: slurm-gpu-pool
+        
+        # 2. 테인트 허용 (NodePool에 설정된 taints가 있다면 필수)
+        tolerations:
+          - key: "slinky.io/usage"
+            operator: "Equal"
+            value: "gpu-task"
+            effect: "NoSchedule"
+        
+        gres: "gpu:8"
+
+```
+
+```
+apiVersion: karpenter.sh/v1beta1
+kind: NodePool
+metadata:
+  name: slurm-gpu-pool
+spec:
+  template:
+    spec:
+      requirements:
+        - key: "node.kubernetes.io/instance-type"
+          operator: In
+          values: ["p4dn.24xlarge"]
+        - key: "karpenter.sh/capacity-type"
+          operator: In
+          values: ["on-demand"] # 또는 spot
+      nodeClassRef:
+        name: slurm-gpu-nodeclass
+---
+apiVersion: karpenter.aws/v1beta1
+kind: EC2NodeClass
+metadata:
+  name: slurm-gpu-nodeclass
+spec:
+  amiFamily: AL2 # 또는 Bottlerocket
+  subnetSelectorTerms:
+    - tags: { "karpenter.sh/discovery": "my-cluster" }
+  securityGroupSelectorTerms:
+    - tags: { "karpenter.sh/discovery": "my-cluster" }
+  # p4dn을 위한 EFA 설정은 AMI 내부에 구성되거나 UserData로 처리
+```
+
 
 ### 3. 파티션 확인하기 ###
 ```
