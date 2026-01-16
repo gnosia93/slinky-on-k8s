@@ -120,7 +120,7 @@ ADDONS  metrics-server
 ADDONS  vpc-cni
 ```
 
-#### 3. IRSA 생성 ####
+#### 3. Role 및 IRSA 생성 ####
 IAM 역할 생성 및 AWS 정책 연결 (EKS 전용 서비스 계정 생성) 한다.
 ```
 eksctl create iamserviceaccount \
@@ -132,6 +132,8 @@ eksctl create iamserviceaccount \
   --approve \
   --role-name EBS_CSI_DriverRole-${CLUSTER_NAME}
 ```
+* 클라우드 포메이션 에러가 발생하였다. 콘솔에서 확인하고 재설치 해야 한다..
+
 
 #### 4. 스토리지 클래스 생성 ####
 default 스토리지 클래스를 gp3 타입으로 생성한다.
