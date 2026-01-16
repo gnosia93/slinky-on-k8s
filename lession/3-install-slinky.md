@@ -154,6 +154,11 @@ reclaimPolicy: Delete
 volumeBindingMode: WaitForFirstConsumer
 EOF
 ```
+생성된 스토리지 클래스를 조회한다. 
+```
+kubectl get sc
+```
+
 
 
 ## 레퍼런스 ##
