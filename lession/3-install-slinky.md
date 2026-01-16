@@ -158,8 +158,12 @@ EOF
 ```
 kubectl get sc
 ```
-
-
+[결과]
+```
+NAME            PROVISIONER             RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
+gp2             kubernetes.io/aws-ebs   Delete          WaitForFirstConsumer   false                  20h
+gp3 (default)   ebs.csi.aws.com         Delete          WaitForFirstConsumer   true                   82s
+```
 
 ## 레퍼런스 ##
 * https://github.com/SlinkyProject/slurm-operator
