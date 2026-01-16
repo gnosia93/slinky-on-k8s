@@ -1,4 +1,4 @@
-# slinky-on-k8s
+# slurm-on-eks
 
 
 본 워크샵은 EKS 클러스터에서 Slurm(Simple Linux Utility for Resource Management) 클러스터를 활용한 분산 트레이닝에 대해서 다룬다.  
