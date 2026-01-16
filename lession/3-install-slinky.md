@@ -92,3 +92,4 @@ Learn more about Slinky:
 
 ## 레퍼런스 ##
 * https://github.com/SlinkyProject/slurm-operator
+* https://aws.amazon.com/ko/blogs/containers/running-slurm-on-amazon-eks-with-slinky/
