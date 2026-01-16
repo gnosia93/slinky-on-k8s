@@ -93,4 +93,9 @@ EOF
 ```
 sbatch train_llama3.sh
 ```
+```
+squeue -u $USER
+tail -f p4dn_test_12345.out
+```
+
 
