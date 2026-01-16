@@ -45,7 +45,7 @@ EOF
 
 helm upgrade --install slurm oci://ghcr.io/slinkyproject/charts/slurm \
   --namespace=slurm --create-namespace \
-  --reuse-values -f slurm-values.yaml
+  -f slurm-values.yaml
 ```
 [결과]
 ```
