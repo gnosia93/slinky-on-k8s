@@ -20,7 +20,7 @@ statesave-slurm-controller-0   Bound    pvc-aa96c336-889e-4186-985f-3d99857a3631
 ```
 
 ### 2. slurm 로그인 ###
-이 워크샵에서는 별도의 로그인 파드를 두지 않고 controller 를 사용한다.
+이 워크샵에서는 별도의 로그인 파드를 두지 않고 controller 를 사용한다. sinfo 로 파티션 정보를 확인한다. STATE 는 idle 이어야 한다.
 ```
 kubectl exec -it slurm-controller-0 -n slurm -c slurmctld -- /bin/bash
 
