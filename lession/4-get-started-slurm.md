@@ -51,5 +51,39 @@ srun -p [파티션명] --nodes=1 --pty bash
 squeue -u [사용자ID] 
 ```
 
+#### 작업 샘플 ####
+```
+#!/bin/bash
+#SBATCH --job-name=llama3_multinode       # 작업 이름
+#SBATCH --nodes=2                         # 사용할 노드 수 (p4dn 2대)
+#SBATCH --ntasks-per-node=1               # 노드당 실행할 작업(프로세스) 수
+#SBATCH --gres=gpu:8                      # 노드당 할당할 GPU 수 (A100 8개)
+#SBATCH --cpus-per-task=96                # p4dn.24xlarge 전체 CPU 코어 활용
+#SBATCH --partition=[당신의_GPU_파티션]       # sinfo에서 확인한 파티션 이름
+#SBATCH --output=%x_%j.out                # 표준 출력 로그 파일
+
+# 1. 분산 학습 환경 변수 설정
+export MASTER_ADDR=$(scontrol show hostnames "$SLURM_JOB_NODELIST" | head -n 1)
+export MASTER_PORT=12802
+export WORLD_SIZE=$((SLURM_NNODES * 8))   # 총 GPU 수 (2노드 * 8개)
+
+# 2. 모델 및 환경 준비 (예: Hugging Face Llama-3)
+# 추천 모델: meta-llama/Meta-Llama-3-8B (빠른 테스트) 또는 70B (성능 중심)
+MODEL_PATH="meta-llama/Meta-Llama-3-8B"
+
+# 3. 분산 학습 실행 (torchrun 활용)
+srun torchrun \
+    --nnodes=$SLURM_NNODES \
+    --nproc_per_node=8 \
+    --rdzv_id=$SLURM_JOB_ID \
+    --rdzv_backend=c10d \
+    --rdzv_endpoint=$MASTER_ADDR:$MASTER_PORT \
+    training_script.py \
+    --model_name_or_path $MODEL_PATH \
+    --batch_size 4 \
+    --use_fsdp True
+```
+
+
 
 
