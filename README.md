@@ -9,3 +9,4 @@
 
 * [C3. Slinky 설치하기](https://github.com/gnosia93/slurm-on-k8s/blob/main/lession/3-install-slinky.md)
 
+* [c4. slurm 시작하기]()
