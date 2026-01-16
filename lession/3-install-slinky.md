@@ -14,10 +14,38 @@ helm install slurm-operator oci://ghcr.io/slinkyproject/charts/slurm-operator \
   --namespace=slinky --create-namespace
 ```
 
-### slurm 크럴스터 설치 ###
+### slurm 클러스터 설치 ###
 ```
-helm install slurm oci://ghcr.io/slinkyproject/charts/slurm \
-  --namespace=slurm --create-namespace
+cat <<EOF > slurm-values.yaml
+nodes:
+  - replicas: 2
+    roles: ["controller"]
+    template:
+      spec:
+        containers:
+          - name: slurmctld
+            image: ghcr.io/slinkyproject/slurmctld:25.11-ubuntu24.04
+
+  - replicas: 2
+    roles: ["worker"]
+    template:
+      spec:
+        containers:
+          - name: slurmd
+            image: ghcr.io/slinkyproject/slurmd:25.11-ubuntu24.04
+
+  - replicas: 2
+    roles: ["login"]
+    template:
+      spec:
+        containers:
+          - name: slogin
+            image: ghcr.io/slinkyproject/slurmd:25.11-ubuntu24.04
+EOF
+
+helm upgrade --install slurm oci://ghcr.io/slinkyproject/charts/slurm \
+  --namespace=slurm --create-namespace \
+  --reuse-values -f slurm-values.yaml
 ```
 [결과]
 ```
