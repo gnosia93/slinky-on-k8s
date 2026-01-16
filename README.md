@@ -10,6 +10,6 @@
   
 * [C2. EKS 클러스터 생성하기](https://github.com/gnosia93/slurm-on-k8s/blob/main/lession/2-building-eks-cluster.md)
 
-* [C3. Slinky 설치하기](https://github.com/gnosia93/slurm-on-k8s/blob/main/lession/3-install-slinky.md)
+* [C3. slinky 설치하기](https://github.com/gnosia93/slurm-on-k8s/blob/main/lession/3-install-slinky.md)
 
 * [C4. slurm 시작하기](https://github.com/gnosia93/slinky-on-k8s/blob/main/lession/4-get-started-slurm.md)
