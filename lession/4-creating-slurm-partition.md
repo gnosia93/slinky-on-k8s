@@ -249,8 +249,17 @@ AWS 비용 최적화를 위해 "특정 사용자가 GPU(TRES)를 100시간 이�
 
 
 ## 참고 ##
-#### slurm 차트 value 확인 ####
+* slurm 차트 value 확인
 ```
 helm show values oci://ghcr.io/slinkyproject/charts/slurm | grep -A 50 "partitions"
 ```
 
+* 차트 내려 받기
+```
+# 1. 차트 파일을 현재 디렉토리에 내려받기
+helm pull oci://ghcr.io/slinkyproject/charts/slurm --version 1.0.1
+# 2. 압축 풀기
+tar -zxvf slurm-1.0.1.tgz
+# 3. 파일 위치로 이동하여 내용 보기
+cat slurm/templates/nodeset/nodeset-cr.yaml
+```
