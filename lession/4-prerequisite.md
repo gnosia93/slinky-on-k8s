@@ -1,3 +1,6 @@
+## 사전준비 ##
+slurm 클러스터에서 GPU 및 efa 디바이스를 사용하기 위해 NVIDIA 및 efa 디바이스 플러그인을 설치하고, 카펜터를 활용한 동적 노드 프로비저닝을 위해 EC2Nodeclass 및 노드풀을 생성한다.   
+
 ### [1. NVIDIA 디바이스 플러그인 설치](https://docs.aws.amazon.com/eks/latest/userguide/ml-eks-k8s-device-plugin.html) ###
 ```
 helm repo add nvdp https://nvidia.github.io/k8s-device-plugin
@@ -38,7 +41,6 @@ kubectl get ds aws-efa-k8s-device-plugin -n kube-system
 NAME                        DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
 aws-efa-k8s-device-plugin   0         0         0       0            0           <none>          13s
 ```
-
 
 ### 3. GPU 노드풀 생성 ###
 ```
