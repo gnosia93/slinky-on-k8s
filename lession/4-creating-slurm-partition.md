@@ -47,7 +47,7 @@ nodesets:
     enabled: true
     replicas: 4                # count 대신 replicas를 사용 (Slinky 1.0.1 규격)
     updateStrategy:
-      rollingUpdate
+      type: RollingUpdate
     nodeSelector:
       workload-type: "slurm-compute"
       architecture: "amx-enabled"
