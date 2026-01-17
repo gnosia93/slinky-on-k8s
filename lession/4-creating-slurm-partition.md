@@ -213,7 +213,8 @@ srun --gres=gpu:1 --partition=gpu hostname
 Slinky는 GRES 자동 구성을 지원하지만, gres.conf 파일이 컨테이너 내부에 적절히 생성되었는지 kubectl exec으로 들어가 /etc/slurm/gres.conf를 확인
 ```
 
-
+* Slinky Autoscaler 활성화: 워크숍 커리큘럼 중 "C3. slinky 설치하기" 단계에서 Autoscaler 옵션이 켜져 있어야 합니다. 이 옵션이 꺼져 있으면 srun을 해도 replicas가 변하지 않아 Karpenter가 반응하지 않습니다.
+* Resume/Suspend Program: Slurm 설정(slurm.conf)에 Slinky가 제공하는 스크립트가 ResumeProgram으로 등록되어 있는지 확인이 필요합니다. AWS HPC 가이드에서는 이 스크립트가 Kubernetes API를 호출해 파드 개수를 조절하도록 안내합니다.
 
 
 
