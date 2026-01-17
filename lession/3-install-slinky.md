@@ -148,7 +148,7 @@ NAME            PROVISIONER             RECLAIMPOLICY   VOLUMEBINDINGMODE      A
 gp2             kubernetes.io/aws-ebs   Delete          WaitForFirstConsumer   false                  101m
 gp3 (default)   ebs.csi.aws.com         Delete          WaitForFirstConsumer   true                   29m
 ```
-slinky 파드들을 확인한다. 
+slurm 오브젝트들을 확인한다. 
 ```
 kubectl get all -n slurm
 ```
