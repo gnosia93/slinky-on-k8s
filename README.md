@@ -61,3 +61,5 @@ loginNode:
 kubectl exec -it deployment/slurm-login-node -n slurm -- /bin/bash
 
 ```
+### __ref__ ##
+* https://www.youtube.com/watch?v=Vi8chqAFuN0
