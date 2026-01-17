@@ -38,7 +38,8 @@ helm install slurm-operator oci://ghcr.io/slinkyproject/charts/slurm-operator \
 #### 3. slurm 설치 ####
 ```
 helm install slurm oci://ghcr.io/slinkyproject/charts/slurm \
-  --namespace=slurm --create-namespace
+  --namespace=slurm --create-namespace \
+  --set autoscaler.enabled=true \
 ```
 [결과]
 ```
