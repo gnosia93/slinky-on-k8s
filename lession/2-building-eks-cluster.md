@@ -188,6 +188,10 @@ managedNodeGroups:                           # 관리형 노드 그룹
     desiredCapacity: 4
     amiFamily: AmazonLinux2023
     privateNetworking: true                  # 이 노드 그룹이 PRIVATE 서브넷만 사용하도록 지정합니다.
+    taints:
+      - key: "partiton"
+        value: "slurm"
+        effect: "NoSchedule" 				 # Slurm 작업(toleration 보유) 외에는 이 노드에 배포되지 않음
     iam:
       withAddonPolicies:
         ebs: true                     		 # EBS CSI 드라이버가 작동하기 위한 IAM 권한 부여
