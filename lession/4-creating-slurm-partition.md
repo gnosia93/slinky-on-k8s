@@ -55,6 +55,9 @@ nodesets:
         value: "slurm"
         effect: "NoSchedule"
     slurmd:
+      image:
+        repository: ghcr.io/slinkyproject/slurmd
+        tag: 25.11-ubuntu24.04
       resources:
         limits:
           cpu: "30"
