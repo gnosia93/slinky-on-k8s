@@ -57,6 +57,9 @@ nodesets:
         effect: "NoSchedule"
     # 컨테이너 설정 (생략 가능, 기본값 사용 시)
     slurmd:
+        logfile: 
+        # path가 비어있으면 기본 경로(/var/log/slurm/slurmd.log)를 사용한다.
+        path: "" 
       image:
         repository: ghcr.io/slinkyproject/slurmd
         tag: 25.11-ubuntu24.04
