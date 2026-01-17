@@ -40,7 +40,7 @@ aws eks describe-nodegroup --cluster-name ${CLUSTER_NAME} \
 노드가 이미 생성되어 있으므로 Slinky에게 "동적으로 띄우지 말고, 이 라벨이 붙은 노드를 파티션으로 써라"고 알려준다. 이때 Toleration 도 함께 설정한다. 
 파티션 설정에 Toleration이 포함되는 이유는 "해당 파티션으로 제출된 모든 작업(Pod)에 이 출입증을 자동으로 달아주기 위함" 이다. 
 ```
-cat <<EOF > amx-partition-values.yaml
+cat <<EOF > amx-nodeset.yaml
 nodesets:
   amx-compute-nodes:  # 노드셋 이름
     count: 4          # desiredCapacity와 동일하게 설정
@@ -71,13 +71,9 @@ nodesets:
 EOF
 ```
 
---reuse-values 을 이용하여 기존에 설정된 다른 값들은 유지하고, YAML에 새롭게 명시된 파티션 설정만 적용한다.
 ```
-helm upgrade slurm oci://ghcr.io/slinkyproject/charts/slurm \
-  --namespace slurm \
-  --set slurm.clusterName="slurm_slurm" \
-  --reset-values \
-  -f amx-partition-values.yaml
+helm upgrade --install slurm-operator oci://ghcr.io/slinkyproject/charts/slurm-operator \
+  --namespace=slinky -f amx-nodeset
 ```
 
 slurmctld 파드로 로그인하여 신규로 설정된 파티션을 확인하다.
