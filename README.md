@@ -16,7 +16,7 @@
 
 * [C4. 작업 파티션(큐) 생성하기](https://github.com/gnosia93/slurm-on-eks/blob/main/lession/4-creating-slurm-partition.md)
 
-* [C5. slurm 기본 명령어 익히기](https://github.com/gnosia93/slinky-on-k8s/blob/main/lession/5-get-started-slurm.md)
+* [C5. slurm 명령어 살펴보기](https://github.com/gnosia93/slurm-on-eks/blob/main/lession/5-slurm-command.md)
 
 * [C6. 복원력 및 작업 재시작](https://github.com/gnosia93/slurm-on-eks/blob/main/lession/6-resilliency.md)
 
