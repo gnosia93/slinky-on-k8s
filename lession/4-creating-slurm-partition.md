@@ -41,10 +41,10 @@ aws eks describe-nodegroup --cluster-name ${CLUSTER_NAME} \
 파티션 설정에 Toleration이 포함되는 이유는 "해당 파티션으로 제출된 모든 작업(Pod)에 이 출입증을 자동으로 달아주기 위함" 이다. 
 ```
 cat <<EOF > amx-nodeset.yaml
-# 1. 노드셋 정의 (최상위 레벨)
+# nodesets 아래에 바로 이름을 키로 사용합니다 (리스트 '-' 제거)
 nodesets:
-  - name: "ns-amx"            # 리스트 형식(-)으로 작성해야 할 수 있습니다.
-    replicas: 4               # count 대신 replicas를 요구할 수 있습니다.
+  ns-amx:
+    replicas: 4                # count 대신 replicas를 사용 (Slinky 1.0.1 규격)
     nodeSelector:
       workload-type: "slurm-compute"
       architecture: "amx-enabled"
@@ -62,11 +62,11 @@ nodesets:
       CPUs: "32"
       Features: "amx"
 
-# 2. 파티션 정의
+# partitions 하위는 리스트 형식을 유지하되, nodes 이름이 위와 정확히 일치해야 함
 partitions:
   - name: "amx-part"
     nodes: 
-      - "ns-amx"              # 노드셋 이름을 리스트 형태로 정확히 매칭
+      - "ns-amx"
     default: true
     extraConfMap:
       MaxTime: "infinite"
