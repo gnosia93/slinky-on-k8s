@@ -42,7 +42,7 @@ aws eks describe-nodegroup --cluster-name ${CLUSTER_NAME} \
 ```
 cat <<EOF > amx-partition-values.yaml
 clusters:
-  - name: "slinky-cluster"
+  - name: "${CLUSTER_NAME}"
     partitions:
       - name: "amx-partition"
         # 중요: Karpenter 설정 대신 고정된 노드 선택기 사용
