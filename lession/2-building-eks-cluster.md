@@ -91,7 +91,7 @@ sh Anaconda3-2023.03-1-Linux-x86_64.sh
 ```
 export AWS_REGION=$(aws ec2 describe-availability-zones --query 'AvailabilityZones[0].RegionName' --output text)
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
-export CLUSTER_NAME="slurm-on-k8s"
+export CLUSTER_NAME="slurm-on-eks"
 export K8S_VERSION="1.34"
 export KARPENTER_VERSION="1.8.1"
 export VPC_ID=$(aws ec2 describe-vpcs --filters Name=tag:Name,Values="${CLUSTER_NAME}" --query "Vpcs[].VpcId" --output text)
@@ -101,12 +101,12 @@ export VPC_ID=$(aws ec2 describe-vpcs --filters Name=tag:Name,Values="${CLUSTER_
 클러스터의 데이터 플레인(워커노드 들)은 아래의 프라이빗 서브넷에 위치하게 된다. 
 ```
 aws ec2 describe-subnets \
-    --filters "Name=tag:Name,Values=SOK-priv-subnet-*" "Name=vpc-id,Values=${VPC_ID}" \
+    --filters "Name=tag:Name,Values=SOE-priv-subnet-*" "Name=vpc-id,Values=${VPC_ID}" \
     --query "Subnets[*].{ID:SubnetId, AZ:AvailabilityZone, Name:Tags[?Key=='Name']|[0].Value}" \
     --output table
 
 SUBNET_IDS=$(aws ec2 describe-subnets \
-    --filters "Name=tag:Name,Values=SOK-priv-subnet-*" "Name=vpc-id,Values=${VPC_ID}" \
+    --filters "Name=tag:Name,Values=SOE-priv-subnet-*" "Name=vpc-id,Values=${VPC_ID}" \
     --query "Subnets[*].{ID:SubnetId, AZ:AvailabilityZone}" \
     --output text)
 
@@ -131,10 +131,10 @@ done
 +-----------------+----------------------------+---------------------+
 |       AZ        |            ID              |        Name         |
 +-----------------+----------------------------+---------------------+
-|  ap-northeast-2d|  subnet-0fe5bcf56f245575b  |  SOK-priv-subnet-4  |
-|  ap-northeast-2a|  subnet-000c6c98079fd1f4a  |  SOK-priv-subnet-1  |
-|  ap-northeast-2c|  subnet-084967ccbf3f04381  |  SOK-priv-subnet-3  |
-|  ap-northeast-2b|  subnet-016c28f36b52c1290  |  SOK-priv-subnet-2  |
+|  ap-northeast-2d|  subnet-0fe5bcf56f245575b  |  SOE-priv-subnet-4  |
+|  ap-northeast-2a|  subnet-000c6c98079fd1f4a  |  SOE-priv-subnet-1  |
+|  ap-northeast-2c|  subnet-084967ccbf3f04381  |  SOE-priv-subnet-3  |
+|  ap-northeast-2b|  subnet-016c28f36b52c1290  |  SOE-priv-subnet-2  |
 +-----------------+----------------------------+---------------------+
 ```
 
@@ -181,6 +181,17 @@ managedNodeGroups:                           # 관리형 노드 그룹
       withAddonPolicies:
         ebs: true                     		 # EBS CSI 드라이버가 작동하기 위한 IAM 권한 부여
 
+  - name: ng-arm
+    instanceType: m7i.8xlarge
+    minSize: 4
+    maxSize: 4
+    desiredCapacity: 4
+    amiFamily: AmazonLinux2023
+    privateNetworking: true                  # 이 노드 그룹이 PRIVATE 서브넷만 사용하도록 지정합니다.
+    iam:
+      withAddonPolicies:
+        ebs: true                     		 # EBS CSI 드라이버가 작동하기 위한 IAM 권한 부여
+
 iam:
   withOIDC: true 
 
@@ -194,15 +205,7 @@ eksctl create cluster -f cluster.yaml
 
 [결과]
 ```
-2026-01-15 16:25:06 [ℹ]  eksctl version 0.221.0
-2026-01-15 16:25:06 [ℹ]  using region ap-northeast-2
-2026-01-15 16:25:06 [✔]  using existing VPC (vpc-0c0cba9615d22b3e8) and subnets (private:map[ap-northeast-2a:{subnet-000c6c98079fd1f4a ap-northeast-2a 10.0.10.0/24 0 } ap-northeast-2b:{subnet-016c28f36b52c1290 ap-northeast-2b 10.0.11.0/24 0 } ap-northeast-2c:{subnet-084967ccbf3f04381 ap-northeast-2c 10.0.12.0/24 0 } ap-northeast-2d:{subnet-0fe5bcf56f245575b ap-northeast-2d 10.0.13.0/24 0 }] public:map[])
-2026-01-15 16:25:06 [!]  custom VPC/subnets will be used; if resulting cluster doesn't function as expected, make sure to review the configuration of VPC/subnets
-2026-01-15 16:25:06 [ℹ]  nodegroup "ng-arm" will use "" [AmazonLinux2023/1.34]
-2026-01-15 16:25:06 [!]  Auto Mode will be enabled by default in an upcoming release of eksctl. This means managed node groups and managed networking add-ons will no longer be created by default. To maintain current behavior, explicitly set 'autoModeConfig.enabled: false' in your cluster configuration. Learn more: https://eksctl.io/usage/auto-mode/
-2026-01-15 16:25:06 [ℹ]  using Kubernetes version 1.34
-2026-01-15 16:25:06 [ℹ]  creating EKS cluster "slinky-on-k8s" in "ap-northeast-2" region with managed nodes
-2026-01-15 16:25:06 [ℹ]  1 nodegroup (ng-arm) was included (based on the include/exclude rules)
+...
 ...
 ```
 
@@ -223,16 +226,7 @@ aws ec2 describe-security-groups \
 ```
 [결과]
 ```
-----------------------------------------------------------------------------------------
-|                                DescribeSecurityGroups                                |
-+----------------------------------------+---------------------------------------------+
-|                   Key                  |                    Value                    |
-+----------------------------------------+---------------------------------------------+
-|  kubernetes.io/cluster/training-on-eks |  owned                                      |
-|  Name                                  |  eks-cluster-sg-training-on-eks-1860330510  |
-|  aws:eks:cluster-name                  |  get-started-eks                            |
-|  karpenter.sh/discovery                |  get-started-eks                            |
-+----------------------------------------+---------------------------------------------+
+...
 ```
 
 ### 추가 정책 설정 ###
@@ -276,6 +270,7 @@ aws iam put-role-policy \
 ```
 
 ## eks 워크샵 인스턴스 출력 ##
+Managed Node Group 에 속한 인스턴스들이 프라이빗 서비스넷을 사용하고 있는지 확인한다. 
 ```
 # 서브넷 ID와 Name 태그를 매핑하여 인스턴스 정보와 함께 출력
 aws ec2 describe-instances \
@@ -291,15 +286,7 @@ aws ec2 describe-instances \
 ```
 [결과]
 ```
------------------------------------------------------------------------------------------------------------------
-|                                               DescribeInstances                                               |
-+---------------------+-----------------------------+------------+-----------------+----------------------------+
-|     InstanceId      |            Name             | NodeGroup  |    PublicIp     |         SubnetId           |
-+---------------------+-----------------------------+------------+-----------------+----------------------------+
-|  i-05885e75c9c56ca1d|  slinky-on-k8s-ng-arm-Node  |  ng-arm    |  None           |  subnet-084967ccbf3f04381  |
-|  i-0a961a083a4b2caf8|  slinky-on-k8s-ng-arm-Node  |  ng-arm    |  None           |  subnet-016c28f36b52c1290  |
-|  i-07789f7b71f1b0e6a|  slinky-code-server-x86     |  None      |  43.203.227.222 |  subnet-0bf25babb2d87bc1b  |
-+---------------------+-----------------------------+------------+-----------------+----------------------------+
+
 ```
 
 ## 클러스터 삭제 ##
@@ -324,7 +311,5 @@ eksctl delete cluster -f cluster.yaml
 
 ## 레퍼런스 ##
 * https://docs.aws.amazon.com/ko_kr/ec2/latest/instancetypes/ec2-instance-regions.html
-
-
 
 
