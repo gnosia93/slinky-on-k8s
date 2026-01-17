@@ -41,7 +41,7 @@ aws eks describe-nodegroup --cluster-name ${CLUSTER_NAME} \
 파티션 설정에 Toleration이 포함되는 이유는 "해당 파티션으로 제출된 모든 작업(Pod)에 이 출입증을 자동으로 달아주기 위함" 이다. 
 ```
 cat <<EOF > amx-nodeset.yaml
-slurm:
+slurm:                        # slurm-operator-1.0.1 chart 
   nodesets:
     ns-amx:                   # 노드셋 이름
       count: 4                # desiredCapacity와 동일하게 설정
