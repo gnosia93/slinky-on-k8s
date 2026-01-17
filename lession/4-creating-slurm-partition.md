@@ -85,6 +85,11 @@ helm upgrade --install slurm-operator oci://ghcr.io/slinkyproject/charts/slurm-o
   --namespace=slinky -f amx-nodeset.yaml
 ```
 
+오퍼레이터 로그를 확인한다.
+```
+kubectl logs -n slinky deployment/slurm-operator
+```
+
 slurmctld 파드로 로그인하여 신규로 설정된 파티션을 확인하다.
 ```
 kubectl exec -it slurm-controller-0 -n slurm -c slurmctld -- /bin/bash
