@@ -82,7 +82,7 @@ EOF
 
 ```
 helm upgrade --install slurm-operator oci://ghcr.io/slinkyproject/charts/slurm-operator \
-  --namespace=slinky -f amx-nodeset
+  --namespace=slinky -f amx-nodeset.yaml
 ```
 
 slurmctld 파드로 로그인하여 신규로 설정된 파티션을 확인하다.
