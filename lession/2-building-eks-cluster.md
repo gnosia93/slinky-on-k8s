@@ -131,10 +131,10 @@ done
 +-----------------+----------------------------+---------------------+
 |       AZ        |            ID              |        Name         |
 +-----------------+----------------------------+---------------------+
-|  ap-northeast-2d|  subnet-0fe5bcf56f245575b  |  SOE-priv-subnet-4  |
-|  ap-northeast-2a|  subnet-000c6c98079fd1f4a  |  SOE-priv-subnet-1  |
-|  ap-northeast-2c|  subnet-084967ccbf3f04381  |  SOE-priv-subnet-3  |
-|  ap-northeast-2b|  subnet-016c28f36b52c1290  |  SOE-priv-subnet-2  |
+|  ap-northeast-2b|  subnet-0ac8189839f1dfd67  |  SOE-priv-subnet-2  |
+|  ap-northeast-2c|  subnet-032de9fe98da7fdbb  |  SOE-priv-subnet-3  |
+|  ap-northeast-2d|  subnet-0fec677af847b90a2  |  SOE-priv-subnet-4  |
+|  ap-northeast-2a|  subnet-0c73c17db8ed13d1b  |  SOE-priv-subnet-1  |
 +-----------------+----------------------------+---------------------+
 ```
 
