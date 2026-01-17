@@ -207,6 +207,11 @@ EOF
 ```
 
 ```
+kubectl appl -f gpu-nodeset.yaml
+```
+
+
+```
 scontrol show node ns-gpu-0
 # GPU 1개를 요청하는 인터랙티브 세션 실행
 srun --gres=gpu:1 --partition=gpu hostname
