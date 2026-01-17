@@ -6,12 +6,7 @@ Slurm에서 파티션(Partition)은 여러 대의 컴퓨팅 노드를 논리적�
 * 사용자 권한 (AllowGroups): 특정 파티션을 사용할 수 있는 사용자 그룹을 제한하여 보안이나 우선순위를 관리할 수 있다.
 * 우선순위 (Priority): 여러 파티션이 동일한 노드를 공유할 때, 어떤 파티션의 작업을 먼저 실행할지 결정한다. 
 
-### 1. 사전준비 ###
-
-* https://github.com/gnosia93/slurm-on-eks/blob/main/lession/4-prerequisite.md
-
-
-### 2. AMEX CPU 파티션 생성 ###
+### 1. AMEX CPU 파티션 생성 ###
 eks 매니지드 노드 그룹 ng-amx 를 구성하는 4대의 m7i.8xlarge 인스턴스를 활용하여 AMEX CPU 파티션 생성할 예정이다. 라벨 정보가 필요하므로 라벨 부터 확인한다. 
 ```
 aws eks describe-nodegroup --cluster-name ${CLUSTER_NAME} \
@@ -156,12 +151,13 @@ PartitionName=amx
    TRES=cpu=128,mem=507024M,node=4,billing=128
 ```
 
-### 3. NVIDIA GPU 파티션 생성 (Karpenter) ###
+### 2. NVIDIA GPU 파티션 생성 (Karpenter) ###
 
+#### 사전준비 ####
+NVIDIA 및 efa 드바이스 플러그인을 설치하고 카펜터 동적 노드 프로비저닝을 위해 GPU 노드풀을 생성한다. 
+* https://github.com/gnosia93/slurm-on-eks/blob/main/lession/4-prerequisite.md
 
-
-* 동작 원리: sbatch 제출 → Slinky가 Pod 생성 → Pod에 slurm-job 관련 Toleration 부여 → 카펜터가 이를 보고 일치하는 NodePool에서 p4dn 실행.
-
+#### GPU 파티션 생성하기 ####
 
 [values.yaml]
 ```
