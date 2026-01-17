@@ -203,6 +203,7 @@ spec:
 
 ### 3. 파티션 확인하기 ###
 ```
+scontrol show config | grep ClusterName
 scontrol show partition gpu-partition
 ```
 
