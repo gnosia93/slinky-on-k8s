@@ -94,6 +94,7 @@ helm show values oci://ghcr.io/slinkyproject/charts/slurm
 helm 차트를 업데이트 한다. 
 ```
 helm upgrade --install slurm oci://ghcr.io/slinkyproject/charts/slurm \
+  --reuse-values \
   --namespace=slurm -f amx-nodeset.yaml
 ```
 
