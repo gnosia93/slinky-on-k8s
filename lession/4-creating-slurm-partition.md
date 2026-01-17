@@ -158,6 +158,57 @@ NVIDIA 및 efa 드바이스 플러그인을 설치하고 카펜터 동적 노드
 * https://github.com/gnosia93/slurm-on-eks/blob/main/lession/4-prerequisite.md
 
 #### GPU 파티션 생성하기 ####
+```
+cat <<EOF > gpu-nodeset.yaml
+# nodesets 아래에 바로 이름을 키로 사용합니다 (리스트 '-' 제거)
+nodesets:
+  ns-gpu:
+    enabled: true
+#    replicas: 4                            # count 대신 replicas를 사용 (Slinky 1.0.1 규격)
+    updateStrategy:
+      type: RollingUpdate
+    podSpec:                   
+      nodeSelector:                        # node selector 를 이용하여 slurmd 가 설치될 노드를 식별한다.
+        workload-type: "slurm-compute"     # workoad-type 라벨
+        architecture: "amx-enabled"        # architecture 라벨 
+      tolerations:                         # 노드그룹에 설정된 taint 를 무력화 시키기 위해서 설정
+        - key: "workload"                  # slurmd 파드가 스케줄링 되면서 자동으로 이 toleration 이 slurmd 파드에 붙는다. 
+          operator: "Equal"
+          value: "slurm"
+          effect: "NoSchedule"
+    slurmd:
+      image:
+        repository: ghcr.io/slinkyproject/slurmd
+        tag: 25.11-ubuntu24.04
+      resources:
+        limits:                            # slurmd 를 스케줄링 하면서 리소스를 선점해 놓는다. slurm 이외에 다른 워크로드의 접근을 차단.
+          cpu: "30"                        # 32 vCPU (m7i.8xlarge) 
+          memory: "120Gi"                  # 120 Gi 메모리 (m7i.8xlarge)
+    # LogFile 사이드카 설정
+    logfile:
+      image:
+        repository: docker.io/library/alpine
+        tag: latest
+    # slurm.conf의 NodeName 줄에 들어갈 내용
+    extraConfMap:                          
+      CPUs: "32"
+      Features: "amx"
+      RealMemory: "122880"
+
+# partitions 하위는 리스트 형식을 유지하되, nodes 이름이 위와 정확히 일치해야 함
+partitions:
+  amx:
+    enabled: true
+    nodesets: 
+      - "ns-amx"
+    configMap:
+      Default: "YES"
+      MaxTime: "infinite"
+      State: "UP"
+EOF
+```
+
+
 
 [values.yaml]
 ```
