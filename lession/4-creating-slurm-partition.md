@@ -212,6 +212,11 @@ helm upgrade --install slurm oci://ghcr.io/slinkyproject/charts/slurm \
   --namespace=slurm -f gpu-nodeset.yaml
 ```
 
+```
+kubectl exec -it slurm-controller-0 -n slurm -c slurmctld -- /bin/bash
+slurm@slurm-controller-0:/tmp$ sinfo
+```
+
 
 ```
 scontrol show node ns-gpu-0
