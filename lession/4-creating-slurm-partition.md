@@ -59,9 +59,10 @@ EOF
 
 --reuse-values 을 이용하여 기존에 설정된 다른 값들은 유지하고, YAML에 새롭게 명시된 파티션 설정만 적용한다.
 ```
-helm upgrade slinky-cluster slinky/slinky-chart \
-  --reuse-values \
-  -f amx-partition-values.yaml
+helm upgrade slurm oci://ghcr.io/slinkyproject/charts/slurm \
+  --namespace=slurm \
+  -f amx-partition-values.yaml \
+  --reuse-values
 ```
 
 slurmctld 파드로 로그인하여 신규로 설정된 파티션을 확인하다.
