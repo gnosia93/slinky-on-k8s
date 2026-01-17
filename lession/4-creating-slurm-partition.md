@@ -57,15 +57,19 @@ clusters:
 EOF
 ```
 
+--reuse-values 을 이용하여 기존에 설정된 다른 값들은 유지하고, YAML에 새롭게 명시된 파티션 설정만 적용한다.
+```
+helm upgrade slinky-cluster slinky/slinky-chart \
+  --reuse-values \
+  -f amx-partition-values.yaml
+```
+
+slurmctld 파드로 로그인하여 신규로 설정된 파티션을 확인하다.
 ```
 kubectl exec -it slurm-controller-0 -n slurm -c slurmctld -- /bin/bash
 slurm@slurm-controller-0:/tmp$ sinfo
 scontrol show partition gpu-partition
-
 ```
-
-
-
 
 ### 2. 동적 프로비저닝 ###
 Slinky는 Kubernetes 위에서 Slurm을 돌리는 구조이므로, 파티션 정의는 보통 values.yaml 파일의 clusters 섹션에서 이루어진다.
