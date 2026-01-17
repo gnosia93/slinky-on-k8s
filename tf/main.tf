@@ -29,7 +29,7 @@ resource "aws_subnet" "public" {
   vpc_id                  = aws_vpc.main.id
   map_public_ip_on_launch = true
   tags = { 
-      Name = "SOK-pub-subnet-${count.index + 1}"
+      Name = "SOE-pub-subnet-${count.index + 1}"
       "kubernetes.io/role/elb" = "1"
       "kubernetes.io/cluster/${var.cluster_name}" = "owned"
   }
@@ -41,7 +41,7 @@ resource "aws_subnet" "private" {
   availability_zone = data.aws_availability_zones.available.names[count.index]
   vpc_id            = aws_vpc.main.id
   tags = { 
-    Name = "SOK-priv-subnet-${count.index + 1}"
+    Name = "SOE-priv-subnet-${count.index + 1}"
     "karpenter.sh/discovery" = var.cluster_name
     "kubernetes.io/role/internal-elb" = "1"
     "kubernetes.io/cluster/${var.cluster_name}" = "shared"
@@ -91,7 +91,7 @@ resource "aws_route_table_association" "private" {
 # ------------------------------------------------
 
 resource "aws_iam_role" "eks_creator_role" {
-  name = "Slinky_Role"
+  name = "Slurm_Role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -116,11 +116,9 @@ resource "aws_iam_role_policy_attachment" "eks_creator_policy_cluster" {
 
 # EC2 인스턴스에 IAM Role을 연결하기 위한 Instance Profile
 resource "aws_iam_instance_profile" "eks_creator_profile" {
-  name = "Slinky_Profile"
+  name = "slurm_Profile"
   role = aws_iam_role.eks_creator_role.name
 }
-
-
 
 # ------------------------------------------------
 # Graviton / X86 EC2 인스턴스 구성
