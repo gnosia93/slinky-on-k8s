@@ -53,8 +53,11 @@ nodesets:
         operator: "Equal"
         value: "slurm"
         effect: "NoSchedule"
-    # 최소한의 객체 구조 정의로 타입 에러 방지
     slurmd:
+      image:
+        # Slinky 공식 이미지를 명시해야 합니다.
+        repository: ghcr.io/slinkyproject/slurmd
+        tag: 25.11-ubuntu24.04
       logfile: {}
       container: {}
 
@@ -66,7 +69,7 @@ partitions:
     configMap:
       State: UP
       Default: "NO"
-      MaxTime: UNLIMITED
+      MaxTime: UNLIMITED   
 EOF
 ```
 
