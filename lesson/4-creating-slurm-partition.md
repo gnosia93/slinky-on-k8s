@@ -157,9 +157,9 @@ PartitionName=amx
 
 #### 사전준비 ####
 
-* [디바이스 플러그인을 설치 및 카펜터 GPU 노드풀 생성](https://github.com/gnosia93/slurm-on-eks/blob/main/lession/4-prerequisite.md)
+* [디바이스 플러그인을 설치 및 카펜터 GPU 노드풀 생성](https://github.com/gnosia93/slurm-on-eks/blob/main/lesson/4-prerequisite.md)
 
-* [Nodeset 오토스케일링을 위한 KEDA 설치](https://github.com/gnosia93/slurm-on-eks/blob/main/lession/4-keda-based-autoscaling.md)
+* [Nodeset 오토스케일링을 위한 KEDA 설치](https://github.com/gnosia93/slurm-on-eks/blob/main/lesson/4-keda-based-autoscaling.md)
 
 #### GPU 파티션 생성하기 ####
 ```
