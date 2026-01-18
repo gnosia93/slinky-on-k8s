@@ -12,21 +12,21 @@
 
 * [C3. slinky 설치하기](https://github.com/gnosia93/slurm-on-k8s/blob/main/lession/3-install-slinky.md)
 
-* [C4. 파티션(큐) 할당하기](https://github.com/gnosia93/slurm-on-eks/blob/main/lession/4-creating-slurm-partition.md)
+* [C4. 파티션(큐) 할당하기 - 작성중](https://github.com/gnosia93/slurm-on-eks/blob/main/lession/4-creating-slurm-partition.md)
 
-* [C5. slurm 명령어 살펴보기](https://github.com/gnosia93/slurm-on-eks/blob/main/lession/5-slurm-command.md)
+* [C5. slurm 명령어 살펴보기 - 작성중](https://github.com/gnosia93/slurm-on-eks/blob/main/lession/5-slurm-command.md)
 
 * C6. 작업 제출하기
   * AMX Lllama
   * GPU Lllama
 
-* [C6. 복원력 및 작업 재시작](https://github.com/gnosia93/slurm-on-eks/blob/main/lesson/6-resilliency.md)
+* [C6. 복원력 및 작업 재시작 - 작성중](https://github.com/gnosia93/slurm-on-eks/blob/main/lesson/6-resilliency.md)
 
-* [C7. 작업 모니터링 하기](https://github.com/gnosia93/slurm-on-eks/blob/main/lesson/7-job-monitoring.md)
+* [C7. 작업 모니터링 하기 - 작성중](https://github.com/gnosia93/slurm-on-eks/blob/main/lesson/7-job-monitoring.md)
 
-* [C8. 데이터 전처리와 체크포인팅](https://github.com/gnosia93/slurm-on-eks/blob/main/lesson/8-preprocessing-chekpointing.md)
+* [C8. 데이터 전처리와 체크포인팅 - 작성중](https://github.com/gnosia93/slurm-on-eks/blob/main/lesson/8-preprocessing-chekpointing.md)
 
-* [C9. 파이프라인 구성하기](https://github.com/gnosia93/slurm-on-eks/blob/main/lesson/9-making-pipeline.md)
+* [C9. 파이프라인 구성하기 - 작성중](https://github.com/gnosia93/slurm-on-eks/blob/main/lesson/9-making-pipeline.md)
 
 ### _Revison History_ ###
 
