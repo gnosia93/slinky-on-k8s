@@ -154,8 +154,10 @@ PartitionName=amx
 ### 2. NVIDIA GPU 파티션 생성 (Karpenter) ###
 
 #### 사전준비 ####
-NVIDIA 및 efa 드바이스 플러그인을 설치하고 카펜터 동적 노드 프로비저닝을 위해 GPU 노드풀을 생성한다. 
-* https://github.com/gnosia93/slurm-on-eks/blob/main/lession/4-prerequisite.md
+
+* [디바이스 플러그인을 설치 및 카펜터 GPU 노드풀 생성](https://github.com/gnosia93/slurm-on-eks/blob/main/lession/4-prerequisite.md)
+
+* [Nodeset 오브젝트를 오토스케일링 하기 위해서는 KEDA 를 설치](https://github.com/gnosia93/slurm-on-eks/blob/main/lession/4-keda-based-autoscaling.md)
 
 #### GPU 파티션 생성하기 ####
 
