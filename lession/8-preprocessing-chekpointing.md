@@ -1,5 +1,6 @@
 ## 데이터 전처리 ##
 
+[preprocess.py]
 ```
 import os
 import argparse
@@ -57,6 +58,8 @@ if __name__ == "__main__":
   각 작업당 사용할 프로세스의 갯수를 설정한다. 보통 전처리의 경우 1 이다.
 * CPUs-per-task (--cpus-per-task)   
   Task(프로세스)가 사용할 CPU 코어의 개수를 설정한다. 
+
+[preprocess.sh]
 ```
 #!/bin/bash
 #SBATCH --job-name=llama3-prep
@@ -78,9 +81,19 @@ srun python preprocess.py \
     --output_dir /data/processed \
     --model_id "meta-llama/Meta-Llama-3-8B"
 ```
-* I/O 효율성: 수백만 개의 텍스트 파일을 읽는 대신, 큰 .tar 파일(WebDataset)로 묶어 저장하므로 나중에 PyTorch WebDataset DataLoader를 쓸 때 GPU 데이터 로딩 병목이 사라집니다.
-* FSx 최적화: lfs setstripe 명령을 통해 결과물을 분산 저장하면, 수백 개의 GPU가 동시에 이 데이터를 읽을 때 Amazon FSx for Lustre 성능을 100% 활용합니다.
-* Llama 3 전용: Meta에서 제공하는 공식 토크나이저를 사용하므로 학습 시 즉시 사용 가능한 데이터가 생성됩니다.
+
+```
+mkdir -p logs               # logs 디렉토리가 없으면 생성 (스크립트에서 지정한 출력 경로)
+sbatch preprocess.sh        # Slurm에 작업 제출
+squeue -u $USER             # 현재 내 작업 목록 확인
+tail -f logs/prep_0.out     # 실시간 로그 확인 (예: 0번 작업 로그)
+
+scancel <JOB_ID>            # 특정 작업 ID 취소
+scancel -u $USER            # 내 모든 작업 취소
+```
+
+
+
 
 ---
 Llama 3와 같은 대규모 모델 학습 시, 전처리된 WebDataset(.tar) 파일을 가장 효율적으로 읽어오는 방법은 webdataset 라이브러리를 사용하는 것입니다. 이 방식은 데이터를 로컬에 다운로드하지 않고 FSx for Lustre에서 직접 스트리밍하므로 메모리 점유율이 매우 낮습니다.
