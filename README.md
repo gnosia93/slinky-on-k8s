@@ -8,9 +8,9 @@
   
 * [C1. VPC 생성하기](https://github.com/gnosia93/slurm-on-k8s/tree/main/tf)
   
-* [C2. EKS 클러스터 생성하기](https://github.com/gnosia93/slurm-on-k8s/blob/main/lession/2-building-eks-cluster.md)
+* [C2. EKS 클러스터 생성하기](https://github.com/gnosia93/slurm-on-k8s/blob/main/lesson/2-building-eks-cluster.md)
 
-* [C3. slinky 설치하기](https://github.com/gnosia93/slurm-on-k8s/blob/main/lession/3-install-slinky.md)
+* [C3. slinky 설치하기](https://github.com/gnosia93/slurm-on-k8s/blob/main/lesson/3-install-slinky.md)
 
 * [C4. 파티션(큐) 할당하기 - 작성중](https://github.com/gnosia93/slurm-on-eks/blob/main/lession/4-creating-slurm-partition.md)
 
