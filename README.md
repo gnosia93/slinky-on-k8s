@@ -3,7 +3,7 @@
 본 워크숍은 Amazon EKS에서 Slurm과 Slinky를 이용해 Llama 3 등 대규모 모델을 최적으로 학습시키는 방법을 소개한다.
 전통적인 HPC 스케줄러인 Slurm은 모든 자원이 준비되었을 때 작업을 시작하는 '갱 스케줄링(Gang Scheduling)'을 통해 대규모 GPU 자원 관리의 안정성을 보장한다. 오픈소스 프로젝트인 Slinky는 이러한 Slurm의 강점을 쿠버네티스 파드(Pod)에 투명하게 연결한다.
 참가자들은 이 워크숍을 통해 복잡한 인프라 구성 없이도 쿠버네티스 환경 내에서 Slurm을 활용하는 핵심 아키텍처와 실전 운용 노하우를 배우게 된다.
-
+![](https://github.com/gnosia93/slurm-on-eks/blob/main/lession/images/slurm-on-eks-workshop.png)
 
 ### _Topics_ ###
   
