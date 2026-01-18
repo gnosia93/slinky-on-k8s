@@ -1,4 +1,4 @@
-### [Nodeset 오토스케일링을 위한 KEDA 설치](https://slinky.schedmd.com/projects/slurm-operator/en/release-1.0/usage/autoscaling.html) ###
+## [Nodeset 오토스케일링을 위한 KEDA 설치](https://slinky.schedmd.com/projects/slurm-operator/en/release-1.0/usage/autoscaling.html) ##
 slrum 의 오토 스케일링, 정확하게는 slurm 파드의 오토 스케일링은 KEDA, Prometheus, Metric 서버 기반으로 동작을 한다. slurm job 이 생성되었을때 Karpenter 까지 연결되는 작동 메커니즘은 다음과 같다. 
 
 #### 작동 메커니즘: Slurm → KEDA → Pod → Karpenter ####
@@ -7,6 +7,8 @@ slrum 의 오토 스케일링, 정확하게는 slurm 파드의 오토 스케일�
 * Pending Pod 생성: NodeSet이 파드를 생성하려고 하지만, 수용할 노드가 없으므로 파드는 Pending 상태로 쿠버네티스 스케줄러에 머뭅니다.
 * Karpenter 출동: Karpenter가 이 Pending 파드를 발견하고, "아, 파드가 필요로 하는 리소스(CPU/GPU 등)에 맞는 실제 노드를 프로비저닝해야겠군!" 하며 인스턴스를 띄웁니다.
 노드가 준비되면 파드가 배치되고, Slurm Worker가 활성화되어 작업을 수행합니다.
+
+### KEDA 설치 ###
 
 프로메테우스를 설치한다. 
 ```
@@ -39,3 +41,28 @@ kubectl get apiservice -l app.kubernetes.io/instance=keda
 ```
 ...
 ```
+
+### KEDA ScaleObject 생성 ###
+```
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: scale-gpu
+spec:
+  scaleTargetRef:
+    apiVersion: slinky.slurm.net/v1beta1
+    kind: NodeSet
+    name: slurm-worker-gpu
+  idleReplicaCount: 0
+  minReplicaCount: 1
+  maxReplicaCount: 10
+  triggers:
+    - type: prometheus
+      metricType: Value
+      metadata:
+        serverAddress: http://prometheus-kube-prometheus-prometheus.prometheus:9090
+        query: slurm_partition_jobs_pending{partition="radar"}
+        threshold: '5'
+```
+<< 위의 내용 수정해야 한다 >>
+
