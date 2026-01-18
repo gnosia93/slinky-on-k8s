@@ -28,4 +28,3 @@
 ---
 * 스토리지 ??? : Llama 3 같은 대용량 모델은 데이터 로딩 속도가 중요.
 
-* https://www.youtube.com/watch?v=Vi8chqAFuN0
