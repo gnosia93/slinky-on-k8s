@@ -14,11 +14,9 @@
 
 * [C4. 파티션(큐) 할당하기 - 작성중](https://github.com/gnosia93/slurm-on-eks/blob/main/lession/4-creating-slurm-partition.md)
 
-* [C5. slurm 명령어 살펴보기 - 작성중](https://github.com/gnosia93/slurm-on-eks/blob/main/lession/5-slurm-command.md)
-
-* C6. 작업 제출하기
-  * AMX Lllama
-  * GPU Lllama
+* C5. 작업 제출하기
+  * AMX Lllama 전처리
+  * GPU Lllama 훈련
 
 * [C6. 복원력 및 작업 재시작 - 작성중](https://github.com/gnosia93/slurm-on-eks/blob/main/lesson/6-resilliency.md)
 
