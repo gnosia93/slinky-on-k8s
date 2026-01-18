@@ -1,3 +1,6 @@
+* 핵심 내용: 쿠버네티스의 단순 파드 재시작과 Slurm의 Job Requeue 기능의 차이점을 강조.
+* 실습 포인트: 노드 장애 상황에서 Slurm이 전체 자원을 어떻게 다시 조율하여 갱 스케줄링(Gang Scheduling)의 정합성을 유지.
+
 ## 장애 대응 및 복구 ##
 
 Slinky 환경에서 장애가 발생하면, Slurm의 작업 관리 메커니즘과 Kubernetes의 자가 치유(Self-healing) 기능이 동시에 작동합니다. Slurm fault tolerance(SchedMD) 원칙에 따른 시나리오별 동작은 다음과 같습니다.
