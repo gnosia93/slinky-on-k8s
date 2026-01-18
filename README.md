@@ -23,7 +23,7 @@
 
 * [C6. 복원력 및 작업 재시작](https://github.com/gnosia93/slurm-on-eks/blob/main/lession/6-resilliency.md)
 
-* [C7. 작업 모니터링 하기]
+* [C7. 작업 모니터링 하기](https://github.com/gnosia93/slurm-on-eks/blob/main/lession/7-job-monitoring.md)
 
 ---
 살짝 아쉬운 점 또는 체크할 것
