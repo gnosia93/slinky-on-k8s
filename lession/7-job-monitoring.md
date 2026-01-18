@@ -1,3 +1,16 @@
+### 성능 확인 방법 ###
+
+```
+# GPU 사용률 및 전력 소모 확인 (전력 소모가 높을수록 일을 많이 하는 중)
+nvidia-smi dmon -s uc
+
+# EFA 통신량 확인
+watch -n 1 "fi_info -p efa"
+```
+
+
+
+
 Slinky(Slurm on EKS) 환경에서 로그를 그라파나(Grafana)로 보내는 가장 표준적인 방법은 Loki를 활용하는 것입니다.
 분산 학습 로그는 워낙 양이 많기 때문에, 전체를 DB에 넣기보다는 [Promtail/Fluent Bit(수집) → Loki(저장) → Grafana(시각화)] 스택을 사용하는 것이 비용과 성능 면에서 유리합니다. Grafana Loki 공식 가이드를 참고하여 Slurm 맞춤형 구성을 정리해 드립니다.
 
