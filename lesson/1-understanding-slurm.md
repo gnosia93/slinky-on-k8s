@@ -29,6 +29,38 @@ Slurm에서 어카운팅(Accounting)은 시스템 자원을 "누가, 언제, 얼
 * sacctmgr: 사용자, 어카운트, 쿼터(Quota) 등을 관리하는 관리자용 도구
 * sreport: 주간/월간 자원 이용률 보고서를 생성.
 
+### 4. 거버넌스 ###
+#### 1. 어카운트(그룹) 생성 ####
+먼저 사용자가 소속될 프로젝트나 팀 단위의 어카운트를 만듭니다. 이때 어카운트 레벨에서 전체 쿼터를 미리 걸 수도 있습니다.
+* 명령어: sacctmgr add account <어카운트명> Description="<설명>" Organization="<조직명>"
+* 예시: sacctmgr add account ai_project Description="AI_Team_Project" Organization="Research_Dept"
+
+#### 2. 사용자 생성 및 어카운트 연결 ####
+사용자를 특정 어카운트에 귀속시키며 생성합니다.
+* 명령어: sacctmgr add user <사용자명> Account=<어카운트명>
+* 예시: sacctmgr add user gildong Account=ai_project
+
+#### 3. 쿼터(Resource Limits) 설정 ####
+이제 핵심인 쿼터를 부여합니다. 특정 사용자 혹은 어카운트 전체에 대해 CPU, GPU, 실행 가능 작업 수 등을 제한할 수 있습니다. 
+* GPU 개수 제한 (사용자 단위):
+```
+sacctmgr modify user gildong set GrpTRES=gres/gpu=2
+```
+(설명: gildong 사용자가 동시에 사용할 수 있는 GPU 총합을 2개로 제한)
+
+* 최대 실행 작업 수 제한 (어카운트 단위):
+```
+sacctmgr modify account ai_project set MaxJobs=10
+```
+(설명: ai_project 팀 전체가 동시에 돌릴 수 있는 작업 수를 10개로 제한)
+
+* CPU 시간 제한 (어카운트 단위):
+```
+sacctmgr modify account ai_project set GrpCPURunMins=10000
+```
+(설명: 해당 팀이 사용 중인 총 CPU 시간 합계를 제한)
+
+
 
 ---
 
