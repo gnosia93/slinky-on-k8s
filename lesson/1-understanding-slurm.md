@@ -29,7 +29,8 @@ Slurm에서 어카운팅(Accounting)은 시스템 자원을 "누가, 언제, 얼
 * sacctmgr: 사용자, 어카운트, 쿼터(Quota) 등을 관리하는 관리자용 도구
 * sreport: 주간/월간 자원 이용률 보고서를 생성.
 
-### 4. 거버넌스 ###
+### 4. 리소스 거버넌스 ###
+
 #### 1. 어카운트(그룹) 생성 ####
 먼저 사용자가 소속될 프로젝트나 팀 단위의 어카운트를 만듭니다. 이때 어카운트 레벨에서 전체 쿼터를 미리 걸 수도 있습니다.
 * 명령어: sacctmgr add account <어카운트명> Description="<설명>" Organization="<조직명>"
@@ -64,6 +65,47 @@ sacctmgr modify account ai_project set GrpCPURunMins=10000
 ```
 sacctmgr show association user=<사용자명> format=Account,User,Partition,GrpTRES,MaxJobs
 ```
+
+### 5. 사용자 관리 ###
+Slurm에서 sacctmgr로 유저를 생성하는 것은 "자원 사용 권한(Accounting)"을 부여하는 과정이지, 실제 서버에 "로그인 계정"을 만드는 것은 아니다.
+로그인을 위해서는 다음 두 가지가 모두 준비되어야 한다.
+
+#### 1. OS 계정이 먼저 있어야 합니다 (LDAP/NIS/AD 등) ####
+Slurm은 독자적인 인증 시스템이 아니라 리눅스 OS 계정 정보를 그대로 가져다 쓴다.
+* 작동 원리: 사용자가 SSH로 마스터 노드(Login Node)에 접속할 때, Slurm은 사용자의 UID(User ID)를 보고 sacctmgr에 등록된 유저인지 확인.
+* 권장 사항: 클러스터 환경(수십~수백 대의 서버)이므로, 각 서버마다 계정을 일일이 만들지 않고 OpenLDAP이나 Active Directory를 통해 계정 정보를 중앙 집중식으로 동기화.
+
+#### 2. Slurmdbd와의 연결 ####
+OS 계정이 있는 상태에서 sacctmgr add user <아이디>를 하면, 비로소 해당 사용자가 sbatch나 srun 명령어를 써서 GPU 자원을 요청할 수 있게 된다.
+만약 OS 계정은 있는데 Slurm에 등록하지 않았다면? 로그인까지는 되지만, 작업을 던지려고 하면 Invalid account or account/partition combination specified라는 에러가 발생한다.
+
+#### 3. 로그인 및 작업 제출 과정 ####
+* SSH 접속: 사용자가 터미널에서 ssh user@login-node로 접속.
+* 작업 제출: 접속 후 sbatch my_job.sh를 실행.
+* 인증: Slurm이 "이 유저가 ai_project 어카운트에 등록되어 있고, 남은 GPU 쿼터가 있나?"를 확인.
+* 실행: 승인되면 실제 계산 노드로 작업이 넘어간다.
+
+💡 컨설팅 포인트
+고객사 인프라를 구축할 때, "유저 관리 자동화"가 핵심이다. Ansible 같은 자동화 도구나 스크립트를 짜서 [리눅스 계정 생성 + Slurm 유저 등록]을 한 번에 처리하도록 설계하는 것이 정석입니다.
+
+#### 로그인 서버가 4대 인경우 ####
+로그인 서버가 4대 정도라면 LDAP/AD 없이 수동 관리도 충분히 가능합니다. 다만, 4대의 서버가 동일한 사용자 ID(UID)와 그룹 ID(GID)를 갖도록 맞추는 것이 핵심입니다.
+[ansible.yaml]
+```
+- hosts: login_servers
+  tasks:
+    - name: Create OS User with specific UID
+      user:
+        name: gildong
+        uid: 2001
+        group: ai_group
+
+    - name: Add User to Slurm Accounting (Run once on Slurm Master)
+      command: sacctmgr -i add user gildong Account=ai_project
+      when: inventory_hostname == "slurm_master"
+```
+
+
 
 ---
 
