@@ -14,3 +14,4 @@ Slurm은 Simple Linux Utility for Resource Management의 약자이다.
 * Slurm을 이용한 GPU 전용 파티션 설정법
 * 작업 간의 우선순위(Fairshare) 관리 전략
 * Slurm과 Docker/Singularity 컨테이너 연동 방식
+* 직접적인 명령어(sbatch, squeue 등) 활용법
