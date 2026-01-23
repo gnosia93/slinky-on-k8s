@@ -90,19 +90,59 @@ OS 계정이 있는 상태에서 sacctmgr add user <아이디>를 하면, 비로
 
 #### 로그인 서버가 4대 인경우 ####
 로그인 서버가 4대 정도라면 LDAP/AD 없이 수동 관리도 충분히 가능합니다. 다만, 4대의 서버가 동일한 사용자 ID(UID)와 그룹 ID(GID)를 갖도록 맞추는 것이 핵심입니다.
+[host.ini]
+```
+[login_servers]
+login1 ansible_host=10.0.0.1
+login2 ansible_host=10.0.0.2
+login3 ansible_host=10.0.0.3
+login4 ansible_host=10.0.0.4
+
+[slurm_master]
+master_node ansible_host=10.0.0.10
+```
+
 [ansible.yaml]
 ```
-- hosts: login_servers
-  tasks:
-    - name: Create OS User with specific UID
-      user:
-        name: gildong
-        uid: 2001
-        group: ai_group
+---
+- name: AI 인프라 유저 통합 생성 (OS 계정 + Slurm 어카운팅)
+  hosts: all
+  become: yes
+  vars:
+    # 생성할 유저 정보 정의
+    user_id: "gildong"
+    user_uid: 2001
+    group_id: "ai_team"
+    group_gid: 3001
+    slurm_account: "ai_project"
 
-    - name: Add User to Slurm Accounting (Run once on Slurm Master)
-      command: sacctmgr -i add user gildong Account=ai_project
-      when: inventory_hostname == "slurm_master"
+  tasks:
+    # 1. 모든 서버(로그인 4대 + 마스터)에 동일한 GID로 그룹 생성
+    - name: "그룹 생성 (GID: {{ group_gid }})"
+      group:
+        name: "{{ group_id }}"
+        gid: "{{ group_gid }}"
+        state: present
+
+    # 2. 모든 서버에 동일한 UID/GID로 유저 생성
+    - name: "유저 생성 (UID: {{ user_uid }}, GID: {{ group_gid }})"
+      user:
+        name: "{{ user_id }}"
+        uid: "{{ user_uid }}"
+        group: "{{ group_id }}"
+        shell: /bin/bash
+        state: present
+
+    # 3. Slurm 마스터 노드에서만 어카운팅 등록 실행
+    - name: "Slurm 어카운팅 등록"
+      command: "sacctmgr -i add user {{ user_id }} Account={{ slurm_account }}"
+      delegate_to: "{{ groups['slurm_master'][0] }}"
+      run_once: true
+      register: slurm_result
+      changed_when: "'Adding' in slurm_result.stdout"
+      failed_when: 
+        - slurm_result.rc != 0 
+        - "'Already exists' not in slurm_result.stderr"
 ```
 
 
