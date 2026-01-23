@@ -275,7 +275,14 @@ singularity exec --nv docker://pytorch/pytorch:latest python train.py
 ```
 MPI와 GPU(NV) 지원이 강력하며, 사용자가 루트 권한을 가질 수 없어 보안상 매우 안전
 
-#### 2. ####
+#### 2. Docker (NVIDIA Pyxis/Enroot) ####
+Docker를 직접 실행하는 대신, NVIDIA가 개발한 Pyxis 플러그인과 Enroot 런타임을 사용하여 Slurm에서 Docker 컨테이너를 네이티브하게 지원할 수 있다.
+```
+# 별도 변환 없이 Docker 이미지 바로 실행
+srun --container-image=nvcr.io#nvidia/tensorflow:23.02-tf1-py3 python -c "import tensorflow"
+```
+사용자 권한(unprivileged)으로 컨테이너를 실행하며, MPI 및 GPU 가속 기능을 완벽히 지원합니다
+
 
 
 * 직접적인 명령어(sbatch, squeue 등) 활용법
